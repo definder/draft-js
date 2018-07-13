@@ -76,6 +76,7 @@ class DraftEditorLeaf extends React.Component<Props> {
    */
 
   leaf: ?HTMLElement;
+  nameOffsetKey: 'data-offset-key';
 
   _setSelection(): void {
     const {selection} = this.props;
@@ -111,6 +112,11 @@ class DraftEditorLeaf extends React.Component<Props> {
     }
 
     setDraftEditorSelection(selection, targetNode, blockKey, start, end);
+  }
+
+  constructor(props){
+    super(props);
+    this.nameOffsetKey = props.nameOffsetKey || this.nameOffsetKey
   }
 
   shouldComponentUpdate(nextProps: Props): boolean {
@@ -162,15 +168,15 @@ class DraftEditorLeaf extends React.Component<Props> {
       const newStyles = customStyleFn(styleSet, block);
       styleObj = Object.assign(styleObj, newStyles);
     }
-
-    return (
-      <span
-        data-offset-key={offsetKey}
-        ref={ref => (this.leaf = ref)}
-        style={styleObj}>
+    return React.createElement(
+        'span',
+        {
+          [this.nameOffsetKey]: offsetKey,
+          'ref': ref => (this.leaf = ref),
+          'style': styleObj,
+        },
         <DraftEditorTextNode>{text}</DraftEditorTextNode>
-      </span>
-    );
+    )
   }
 }
 
