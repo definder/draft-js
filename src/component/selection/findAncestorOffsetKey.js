@@ -16,10 +16,10 @@ const getSelectionOffsetKeyForNode = require('getSelectionOffsetKeyForNode');
 /**
  * Get the key from the node's nearest offset-aware ancestor.
  */
-function findAncestorOffsetKey(node: Node): ?string {
+function findAncestorOffsetKey(node: Node, nameOffsetKey): ?string {
   let searchNode = node;
   while (searchNode && searchNode !== document.documentElement) {
-    const key = getSelectionOffsetKeyForNode(searchNode);
+    const key = getSelectionOffsetKeyForNode(searchNode, nameOffsetKey);
     if (key != null) {
       return key;
     }

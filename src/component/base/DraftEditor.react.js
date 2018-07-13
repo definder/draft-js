@@ -140,6 +140,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
     blockStyleFn: emptyFunction.thatReturns(''),
     keyBindingFn: getDefaultKeyBinding,
     readOnly: false,
+    disabledHandlers: false,
     spellCheck: false,
     stripPastedStyles: false,
   };
@@ -154,6 +155,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
   _latestEditorState: EditorState;
   _latestCommittedEditorState: EditorState;
   _pendingStateFromBeforeInput: void | EditorState;
+  _nameOffsetKey: string;
 
   /**
    * Define proxies that can route events to the current handler.
@@ -204,6 +206,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
     this._placeholderAccessibilityID = 'placeholder-' + this._editorKey;
     this._latestEditorState = props.editorState;
     this._latestCommittedEditorState = props.editorState;
+    this._nameOffsetKey = props.nameOffsetKey;
 
     this._onBeforeInput = this._buildHandler('onBeforeInput');
     this._onBlur = this._buildHandler('onBlur');
@@ -268,7 +271,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
     // effectively a no-op. In async mode, this ensures all updates scheduled
     // inside the handler are flushed before React yields to the browser.
     return e => {
-      if (!this.props.readOnly) {
+      if (!this.props.readOnly && !this.props.disabledHandlers) {
         const method = this._handler && this._handler[eventName];
         if (method) {
           if (flushControlled) {
@@ -314,6 +317,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
       readOnly,
       textAlignment,
       textDirectionality,
+      nameOffsetKey,
     } = this.props;
 
     const rootClass = cx({
@@ -354,6 +358,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
       editorState,
       key: 'contents' + this.state.contentsKey,
       textDirectionality,
+      nameOffsetKey,
     };
 
     return (

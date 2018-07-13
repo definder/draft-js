@@ -190,6 +190,12 @@ export type DraftEditorProps = {
   onPaste?: (DraftEditor, SyntheticClipboardEvent<>) => void | Promise<void>,
   onCut?: (DraftEditor, SyntheticClipboardEvent<>) => void,
   onCopy?: (DraftEditor, SyntheticClipboardEvent<>) => void,
+
+  //Naming data attribute for block
+  nameOffsetKey: string,
+
+  //Disable handler action
+  disabledHandlers: boolean,
 };
 
 export type DraftEditorDefaultProps = {
@@ -200,4 +206,6 @@ export type DraftEditorDefaultProps = {
   readOnly: boolean,
   spellCheck: boolean,
   stripPastedStyles: boolean,
+  nameOffsetKey: string,
+  disabledHandlers: boolean,
 };

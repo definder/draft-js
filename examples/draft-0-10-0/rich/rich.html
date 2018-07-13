@@ -38,9 +38,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       class RichEditorExample extends React.Component {
         constructor(props) {
           super(props);
-          this.state = {editorState: EditorState.createEmpty()};
+          this.state = {editorState: EditorState.createEmpty(), disabled: false};
 
-          this.focus = () => this.refs.editor.focus();
+          this.focus = () => {this.setState({disabled: false}, () => this.refs.editor.focus())};
           this.onChange = (editorState) => this.setState({editorState});
 
           this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -125,6 +125,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                   placeholder="Tell a story..."
                   ref="editor"
                   spellCheck={true}
+                  nameOffsetKey="data-neighbor-offset-key"
+                  disabledHandlers={this.state.disabled}
                 />
               </div>
             </div>
@@ -217,7 +219,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
       const InlineStyleControls = (props) => {
         const currentStyle = props.editorState.getCurrentInlineStyle();
-        
+
         return (
           <div className="RichEditor-controls">
             {INLINE_STYLES.map((type) =>

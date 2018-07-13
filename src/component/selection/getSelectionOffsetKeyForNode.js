@@ -15,20 +15,25 @@
  * Get offset key from a node or it's child nodes. Return the first offset key
  * found on the DOM tree of given node.
  */
-function getSelectionOffsetKeyForNode(node: Node): ?string {
-  if (node instanceof Element) {
-    const offsetKey = node.getAttribute('data-offset_1-key');
-    if (offsetKey) {
-      return offsetKey;
-    }
-    for (let ii = 0; ii < node.childNodes.length; ii++) {
-      const childOffsetKey = getSelectionOffsetKeyForNode(node.childNodes[ii]);
-      if (childOffsetKey) {
-        return childOffsetKey;
+function getSelectionOffsetKeyForNode(node: Node, nameOffsetKey): ?string {
+  function _getSelectionOffsetKeyForNode(_node: Node) {
+    if (_node instanceof Element) {
+      const offsetKey = _node.getAttribute(nameOffsetKey);
+      if (offsetKey) {
+        return offsetKey;
+      }
+      for (let ii = 0; ii < _node.childNodes.length; ii++) {
+        const childOffsetKey = _getSelectionOffsetKeyForNode(
+          _node.childNodes[ii],
+        );
+        if (childOffsetKey) {
+          return childOffsetKey;
+        }
       }
     }
+    return null;
   }
-  return null;
+  return _getSelectionOffsetKeyForNode(node);
 }
 
 module.exports = getSelectionOffsetKeyForNode;
