@@ -87,7 +87,8 @@ function editOnInput(editor: DraftEditor): void {
 
   let domText = anchorNode.textContent;
   const editorState = editor._latestEditorState;
-  const offsetKey = nullthrows(findAncestorOffsetKey(anchorNode));
+  const nameOffsetKey = editor._nameOffsetKey;
+  const offsetKey = nullthrows(findAncestorOffsetKey(anchorNode, nameOffsetKey));
   const {blockKey, decoratorKey, leafKey} = DraftOffsetKey.decode(offsetKey);
 
   const {start, end} = editorState

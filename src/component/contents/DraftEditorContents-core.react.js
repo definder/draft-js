@@ -211,7 +211,7 @@ class DraftEditorContents extends React.Component<Props> {
         className,
         'data-block': true,
         'data-editor': editorKey,
-        'data-offset_1-key': offsetKey,
+        [nameOffsetKey]: offsetKey,
         key,
       };
       if (customEditable !== undefined) {
@@ -260,7 +260,7 @@ class DraftEditorContents extends React.Component<Props> {
           info.wrapperTemplate,
           {
             key: info.key + '-wrap',
-            'data-offset_1-key': info.offsetKey,
+            [nameOffsetKey]: info.offsetKey,
           },
           blocks,
         );

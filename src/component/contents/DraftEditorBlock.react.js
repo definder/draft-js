@@ -153,6 +153,7 @@ class DraftEditorBlock extends React.Component<Props> {
             return (
               <DraftEditorLeaf
                 key={offsetKey}
+                nameOffsetKey={this.props.nameOffsetKey}
                 offsetKey={offsetKey}
                 block={block}
                 start={start}
@@ -226,11 +227,13 @@ class DraftEditorBlock extends React.Component<Props> {
       'public/DraftStyleDefault/ltr': direction === 'LTR',
       'public/DraftStyleDefault/rtl': direction === 'RTL',
     });
-
-    return (
-      <div data-offset-key={offsetKey} className={className}>
-        {this._renderChildren()}
-      </div>
+    return React.createElement(
+      'div',
+      {
+        [this.props.nameOffsetKey]: offsetKey,
+        className,
+      },
+      this._renderChildren(),
     );
   }
 }

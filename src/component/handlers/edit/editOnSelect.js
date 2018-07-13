@@ -49,6 +49,7 @@ function editOnSelect(editor: DraftEditor): void {
   const documentSelection = getDraftEditorSelection(
     editorState,
     editorNode.firstChild,
+    editor._nameOffsetKey,
   );
   const updatedSelectionState = documentSelection.selectionState;
 

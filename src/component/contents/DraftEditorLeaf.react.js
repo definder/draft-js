@@ -76,7 +76,6 @@ class DraftEditorLeaf extends React.Component<Props> {
    */
 
   leaf: ?HTMLElement;
-  nameOffsetKey: 'data-offset-key';
 
   _setSelection(): void {
     const {selection} = this.props;
@@ -116,7 +115,7 @@ class DraftEditorLeaf extends React.Component<Props> {
 
   constructor(props){
     super(props);
-    this.nameOffsetKey = props.nameOffsetKey || this.nameOffsetKey
+    this.nameOffsetKey = props.nameOffsetKey;
   }
 
   shouldComponentUpdate(nextProps: Props): boolean {

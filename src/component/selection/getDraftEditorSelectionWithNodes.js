@@ -37,6 +37,7 @@ function getDraftEditorSelectionWithNodes(
   anchorOffset: number,
   focusNode: Node,
   focusOffset: number,
+  nameOffsetKey: string,
 ): DOMDerivedSelection {
   const anchorIsTextNode = anchorNode.nodeType === Node.TEXT_NODE;
   const focusIsTextNode = focusNode.nodeType === Node.TEXT_NODE;
@@ -48,9 +49,9 @@ function getDraftEditorSelectionWithNodes(
     return {
       selectionState: getUpdatedSelectionState(
         editorState,
-        nullthrows(findAncestorOffsetKey(anchorNode)),
+        nullthrows(findAncestorOffsetKey(anchorNode, nameOffsetKey)),
         anchorOffset,
-        nullthrows(findAncestorOffsetKey(focusNode)),
+        nullthrows(findAncestorOffsetKey(focusNode, nameOffsetKey)),
         focusOffset,
       ),
       needsRecovery: false,
@@ -81,19 +82,39 @@ function getDraftEditorSelectionWithNodes(
 
   if (anchorIsTextNode) {
     anchorPoint = {
-      key: nullthrows(findAncestorOffsetKey(anchorNode)),
+      key: nullthrows(findAncestorOffsetKey(anchorNode, nameOffsetKey)),
       offset: anchorOffset,
     };
-    focusPoint = getPointForNonTextNode(root, focusNode, focusOffset);
+    focusPoint = getPointForNonTextNode(
+      root,
+      focusNode,
+      focusOffset,
+      nameOffsetKey,
+    );
   } else if (focusIsTextNode) {
     focusPoint = {
-      key: nullthrows(findAncestorOffsetKey(focusNode)),
+      key: nullthrows(findAncestorOffsetKey(focusNode, nameOffsetKey)),
       offset: focusOffset,
     };
-    anchorPoint = getPointForNonTextNode(root, anchorNode, anchorOffset);
+    anchorPoint = getPointForNonTextNode(
+      root,
+      anchorNode,
+      anchorOffset,
+      nameOffsetKey,
+    );
   } else {
-    anchorPoint = getPointForNonTextNode(root, anchorNode, anchorOffset);
-    focusPoint = getPointForNonTextNode(root, focusNode, focusOffset);
+    anchorPoint = getPointForNonTextNode(
+      root,
+      anchorNode,
+      anchorOffset,
+      nameOffsetKey,
+    );
+    focusPoint = getPointForNonTextNode(
+      root,
+      focusNode,
+      focusOffset,
+      nameOffsetKey,
+    );
 
     // If the selection is collapsed on an empty block, don't force recovery.
     // This way, on arrow key selection changes, the browser can move the
@@ -153,9 +174,10 @@ function getPointForNonTextNode(
   editorRoot: ?HTMLElement,
   startNode: Node,
   childOffset: number,
+  nameOffsetKey: string,
 ): SelectionPoint {
   let node = startNode;
-  const offsetKey: ?string = findAncestorOffsetKey(node);
+  const offsetKey: ?string = findAncestorOffsetKey(node, nameOffsetKey);
 
   invariant(
     offsetKey != null ||
