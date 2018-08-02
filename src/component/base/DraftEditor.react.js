@@ -143,6 +143,7 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
     disabledHandlers: false,
     spellCheck: false,
     stripPastedStyles: false,
+    nameOffsetKey: 'data-offset-key',
   };
 
   _blockSelectEvents: boolean;
@@ -421,9 +422,9 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
             suppressContentEditableWarning
             tabIndex={this.props.tabIndex}>
             {/*
-              Needs to come earlier in the tree as a sibling (not ancestor) of
-              all DraftEditorLeaf nodes so it's first in postorder traversal.
-            */}
+             Needs to come earlier in the tree as a sibling (not ancestor) of
+             all DraftEditorLeaf nodes so it's first in postorder traversal.
+             */}
             <UpdateDraftEditorFlags editor={this} editorState={editorState} />
             <DraftEditorContents {...editorContentsProps} />
           </div>
