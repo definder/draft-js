@@ -56,7 +56,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           };
 
           this.focus = () => this.refs.editor.focus();
-          this.onChange = (editorState) => this.setState({editorState});
+          this.onChange = (editorState) => {
+              console.log(editorState.getCurrentContent().toJS())
+              this.setState({editorState})
+          };
           this.logState = () => {
             const content = this.state.editorState.getCurrentContent();
             console.log(convertToRaw(content));

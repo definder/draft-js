@@ -112,7 +112,7 @@ class DraftEditorLeaf extends React.Component {
   }
 
   shouldComponentUpdate(nextProps: Props): boolean {
-    const leafNode = ReactDOM.findDOMNode(this.refs.leaf);
+    const leafNode = ReactDOM.findDOMNode(this.leaf);
     invariant(leafNode, 'Missing leafNode');
     return (
       leafNode.textContent !== nextProps.text ||
@@ -130,7 +130,10 @@ class DraftEditorLeaf extends React.Component {
   }
 
   render(): React.Element<any> {
-    const {block} = this.props;
+    const {
+      block,
+      nameOffsetKey,
+    } = this.props;
     let {text} = this.props;
 
     // If the leaf is at the end of its block and ends in a soft newline, append
@@ -162,14 +165,14 @@ class DraftEditorLeaf extends React.Component {
       const newStyles = customStyleFn(styleSet, block);
       styleObj = Object.assign(styleObj, newStyles);
     }
-
-    return (
-      <span
-        data-offset-key={offsetKey}
-        ref="leaf"
-        style={styleObj}>
-        <DraftEditorTextNode>{text}</DraftEditorTextNode>
-      </span>
+    return React.createElement(
+      'span',
+      {
+        [nameOffsetKey]: offsetKey,
+        'ref': ref => (this.leaf = ref),
+        'style': styleObj,
+      },
+      <DraftEditorTextNode>{text}</DraftEditorTextNode>,
     );
   }
 }

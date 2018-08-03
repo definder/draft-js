@@ -128,22 +128,23 @@ class DraftEditorBlock extends React.Component {
   }
 
   _renderChildren(): Array<React.Element<any>> {
-    var block = this.props.block;
-    var blockKey = block.getKey();
-    var text = block.getText();
-    var lastLeafSet = this.props.tree.size - 1;
-    var hasSelection = isBlockOnSelectionEdge(this.props.selection, blockKey);
+    const block = this.props.block;
+    const blockKey = block.getKey();
+    const text = block.getText();
+    const lastLeafSet = this.props.tree.size - 1;
+    const hasSelection = isBlockOnSelectionEdge(this.props.selection, blockKey);
 
     return this.props.tree.map((leafSet, ii) => {
-      var leavesForLeafSet = leafSet.get('leaves');
-      var lastLeaf = leavesForLeafSet.size - 1;
-      var leaves = leavesForLeafSet.map((leaf, jj) => {
-        var offsetKey = DraftOffsetKey.encode(blockKey, ii, jj);
-        var start = leaf.get('start');
-        var end = leaf.get('end');
+      const leavesForLeafSet = leafSet.get('leaves');
+      const lastLeaf = leavesForLeafSet.size - 1;
+      const leaves = leavesForLeafSet.map((leaf, jj) => {
+        const offsetKey = DraftOffsetKey.encode(blockKey, ii, jj);
+        const start = leaf.get('start');
+        const end = leaf.get('end');
         return (
           <DraftEditorLeaf
             key={offsetKey}
+            nameOffsetKey={this.props.nameOffsetKey}
             offsetKey={offsetKey}
             block={block}
             start={start}
@@ -158,7 +159,7 @@ class DraftEditorBlock extends React.Component {
         );
       }).toArray();
 
-      var decoratorKey = leafSet.get('decoratorKey');
+      const decoratorKey = leafSet.get('decoratorKey');
       if (decoratorKey == null) {
         return leaves;
       }
@@ -167,16 +168,16 @@ class DraftEditorBlock extends React.Component {
         return leaves;
       }
 
-      var decorator = nullthrows(this.props.decorator);
+      const decorator = nullthrows(this.props.decorator);
 
-      var DecoratorComponent = decorator.getComponentForKey(decoratorKey);
+      const DecoratorComponent = decorator.getComponentForKey(decoratorKey);
       if (!DecoratorComponent) {
         return leaves;
       }
 
-      var decoratorProps = decorator.getPropsForKey(decoratorKey);
-      var decoratorOffsetKey = DraftOffsetKey.encode(blockKey, ii, 0);
-      var decoratedText = text.slice(
+      const decoratorProps = decorator.getPropsForKey(decoratorKey);
+      const decoratorOffsetKey = DraftOffsetKey.encode(blockKey, ii, 0);
+      const decoratedText = text.slice(
         leavesForLeafSet.first().get('start'),
         leavesForLeafSet.last().get('end'),
       );
@@ -210,11 +211,13 @@ class DraftEditorBlock extends React.Component {
       'public/DraftStyleDefault/ltr': direction === 'LTR',
       'public/DraftStyleDefault/rtl': direction === 'RTL',
     });
-
-    return (
-      <div data-offset-key={offsetKey} className={className}>
-        {this._renderChildren()}
-      </div>
+    return React.createElement(
+      'div',
+      {
+        [this.props.nameOffsetKey]: offsetKey,
+        className,
+      },
+      this._renderChildren(),
     );
   }
 }

@@ -25,6 +25,7 @@ var getDraftEditorSelectionWithNodes = require('getDraftEditorSelectionWithNodes
 function getDraftEditorSelection(
   editorState: EditorState,
   root: HTMLElement,
+  nameOffsetKey: string,
 ): DOMDerivedSelection {
   var selection = global.getSelection();
 
@@ -43,6 +44,7 @@ function getDraftEditorSelection(
     selection.anchorOffset,
     selection.focusNode,
     selection.focusOffset,
+    nameOffsetKey,
   );
 }
 

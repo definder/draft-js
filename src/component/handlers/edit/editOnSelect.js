@@ -26,18 +26,19 @@ function editOnSelect(editor: DraftEditor): void {
     return;
   }
 
-  var editorState = editor.props.editorState;
-  const editorNode = ReactDOM.findDOMNode(editor.refs.editorContainer);
+  let editorState = editor.props.editorState;
+  const editorNode = ReactDOM.findDOMNode(editor.editorContainer);
   invariant(editorNode, 'Missing editorNode');
   invariant(
     editorNode.firstChild instanceof HTMLElement,
     'editorNode.firstChild is not an HTMLElement',
   );
-  var documentSelection = getDraftEditorSelection(
+  const documentSelection = getDraftEditorSelection(
     editorState,
     editorNode.firstChild,
+    editor._nameOffsetKey,
   );
-  var updatedSelectionState = documentSelection.selectionState;
+  const updatedSelectionState = documentSelection.selectionState;
 
   if (updatedSelectionState !== editorState.getSelection()) {
     if (documentSelection.needsRecovery) {

@@ -45,9 +45,9 @@ function editOnInput(editor: DraftEditor): void {
     editor._pendingStateFromBeforeInput = undefined;
   }
 
-  var domSelection = global.getSelection();
+  const domSelection = global.getSelection();
 
-  var {anchorNode, isCollapsed} = domSelection;
+  const {anchorNode, isCollapsed} = domSelection;
   const isNotTextNode =
     anchorNode.nodeType !== Node.TEXT_NODE;
   const isNotTextOrElementNode = anchorNode.nodeType !== Node.TEXT_NODE
@@ -85,18 +85,19 @@ function editOnInput(editor: DraftEditor): void {
     }
   }
 
-  var domText = anchorNode.textContent;
-  var editorState = editor._latestEditorState;
-  var offsetKey = nullthrows(findAncestorOffsetKey(anchorNode));
-  var {blockKey, decoratorKey, leafKey} = DraftOffsetKey.decode(offsetKey);
+  let domText = anchorNode.textContent;
+  const editorState = editor._latestEditorState;
+  const nameOffsetKey = editor._nameOffsetKey;
+  const offsetKey = nullthrows(findAncestorOffsetKey(anchorNode, nameOffsetKey));
+  const {blockKey, decoratorKey, leafKey} = DraftOffsetKey.decode(offsetKey);
 
-  var {start, end} = editorState
+  const {start, end} = editorState
     .getBlockTree(blockKey)
     .getIn([decoratorKey, 'leaves', leafKey]);
 
-  var content = editorState.getCurrentContent();
-  var block = content.getBlockForKey(blockKey);
-  var modelText = block.getText().slice(start, end);
+  const content = editorState.getCurrentContent();
+  const block = content.getBlockForKey(blockKey);
+  const modelText = block.getText().slice(start, end);
 
   // Special-case soft newlines here. If the DOM text ends in a soft newline,
   // we will have manually inserted an extra soft newline in DraftEditorLeaf.

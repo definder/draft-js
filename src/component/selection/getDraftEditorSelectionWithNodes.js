@@ -16,11 +16,11 @@
 import type {DOMDerivedSelection} from 'DOMDerivedSelection';
 import type EditorState from 'EditorState';
 
-var findAncestorOffsetKey = require('findAncestorOffsetKey');
-var getSelectionOffsetKeyForNode = require('getSelectionOffsetKeyForNode');
-var getUpdatedSelectionState = require('getUpdatedSelectionState');
-var invariant = require('invariant');
-var nullthrows = require('nullthrows');
+const findAncestorOffsetKey = require('findAncestorOffsetKey');
+const getSelectionOffsetKeyForNode = require('getSelectionOffsetKeyForNode');
+const getUpdatedSelectionState = require('getUpdatedSelectionState');
+const invariant = require('invariant');
+const nullthrows = require('nullthrows');
 
 type SelectionPoint = {
   key: string,
@@ -38,9 +38,10 @@ function getDraftEditorSelectionWithNodes(
   anchorOffset: number,
   focusNode: Node,
   focusOffset: number,
+  nameOffsetKey: string,
 ): DOMDerivedSelection {
-  var anchorIsTextNode = anchorNode.nodeType === Node.TEXT_NODE;
-  var focusIsTextNode = focusNode.nodeType === Node.TEXT_NODE;
+  const anchorIsTextNode = anchorNode.nodeType === Node.TEXT_NODE;
+  const focusIsTextNode = focusNode.nodeType === Node.TEXT_NODE;
 
   // If the selection range lies only on text nodes, the task is simple.
   // Find the nearest offset-aware elements and use the
@@ -49,9 +50,9 @@ function getDraftEditorSelectionWithNodes(
     return {
       selectionState: getUpdatedSelectionState(
         editorState,
-        nullthrows(findAncestorOffsetKey(anchorNode)),
+        nullthrows(findAncestorOffsetKey(anchorNode, nameOffsetKey)),
         anchorOffset,
-        nullthrows(findAncestorOffsetKey(focusNode)),
+        nullthrows(findAncestorOffsetKey(focusNode, nameOffsetKey)),
         focusOffset,
       ),
       needsRecovery: false,
@@ -82,19 +83,45 @@ function getDraftEditorSelectionWithNodes(
 
   if (anchorIsTextNode) {
     anchorPoint = {
-      key: nullthrows(findAncestorOffsetKey(anchorNode)),
+      key: nullthrows(findAncestorOffsetKey(
+        anchorNode,
+        nameOffsetKey),
+      ),
       offset: anchorOffset,
     };
-    focusPoint = getPointForNonTextNode(root, focusNode, focusOffset);
+    focusPoint = getPointForNonTextNode(
+      root,
+      focusNode,
+      focusOffset,
+      nameOffsetKey,
+    );
   } else if (focusIsTextNode) {
     focusPoint = {
-      key: nullthrows(findAncestorOffsetKey(focusNode)),
+      key: nullthrows(findAncestorOffsetKey(
+        focusNode,
+        nameOffsetKey),
+      ),
       offset: focusOffset,
     };
-    anchorPoint = getPointForNonTextNode(root, anchorNode, anchorOffset);
+    anchorPoint = getPointForNonTextNode(
+      root,
+      anchorNode,
+      anchorOffset,
+      nameOffsetKey,
+    );
   } else {
-    anchorPoint = getPointForNonTextNode(root, anchorNode, anchorOffset);
-    focusPoint = getPointForNonTextNode(root, focusNode, focusOffset);
+    anchorPoint = getPointForNonTextNode(
+      root,
+      anchorNode,
+      anchorOffset,
+      nameOffsetKey,
+    );
+    focusPoint = getPointForNonTextNode(
+      root,
+      focusNode,
+      focusOffset,
+      nameOffsetKey,
+    );
 
     // If the selection is collapsed on an empty block, don't force recovery.
     // This way, on arrow key selection changes, the browser can move the
@@ -142,9 +169,10 @@ function getPointForNonTextNode(
   editorRoot: ?HTMLElement,
   startNode: Node,
   childOffset: number,
+  nameOffsetKey: string,
 ): SelectionPoint {
   let node = startNode;
-  var offsetKey: ?string = findAncestorOffsetKey(node);
+  var offsetKey: ?string = findAncestorOffsetKey(node, nameOffsetKey);
 
   invariant(
     offsetKey != null ||

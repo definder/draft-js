@@ -76,6 +76,8 @@ class DraftEditor extends React.Component {
     blockStyleFn: emptyFunction.thatReturns(''),
     keyBindingFn: getDefaultKeyBinding,
     readOnly: false,
+    disabledHandlers: false,
+    nameOffsetKey: 'data-offset-key',
     spellCheck: false,
     stripPastedStyles: false,
   };
@@ -90,6 +92,7 @@ class DraftEditor extends React.Component {
   _latestEditorState: EditorState;
   _latestCommittedEditorState: EditorState;
   _pendingStateFromBeforeInput: void | EditorState;
+  _nameOffsetKey: string;
 
   /**
    * Define proxies that can route events to the current handler.
@@ -138,6 +141,7 @@ class DraftEditor extends React.Component {
     this._placeholderAccessibilityID = 'placeholder-' + this._editorKey;
     this._latestEditorState = props.editorState;
     this._latestCommittedEditorState = props.editorState;
+    this._nameOffsetKey = props.nameOffsetKey;
 
     this._onBeforeInput = this._buildHandler('onBeforeInput');
     this._onBlur = this._buildHandler('onBlur');
@@ -184,7 +188,7 @@ class DraftEditor extends React.Component {
    */
   _buildHandler(eventName: string): Function {
     return (e) => {
-      if (!this.props.readOnly) {
+      if (!this.props.readOnly && !this.props.disabledHandlers) {
         const method = this._handler && this._handler[eventName];
         method && method(this, e);
       }
@@ -233,7 +237,7 @@ class DraftEditor extends React.Component {
         {this._renderPlaceholder()}
         <div
           className={cx('DraftEditor/editorContainer')}
-          ref="editorContainer">
+          ref={ref => (this.editorContainer = ref)}>
           <div
             aria-activedescendant={
               readOnly ? null : this.props.ariaActiveDescendantID
@@ -280,7 +284,7 @@ class DraftEditor extends React.Component {
             onMouseUp={this._onMouseUp}
             onPaste={this._onPaste}
             onSelect={this._onSelect}
-            ref="editor"
+            ref={ref => (this.editor = ref)}
             role={readOnly ? null : (this.props.role || 'textbox')}
             spellCheck={allowSpellCheck && this.props.spellCheck}
             style={contentStyle}
@@ -293,6 +297,7 @@ class DraftEditor extends React.Component {
               customStyleMap={
                 {...DefaultDraftInlineStyle, ...this.props.customStyleMap}
               }
+              nameOffsetKey={this.props.nameOffsetKey}
               customStyleFn={this.props.customStyleFn}
               editorKey={this._editorKey}
               editorState={this.props.editorState}
@@ -351,7 +356,7 @@ class DraftEditor extends React.Component {
   _focus(scrollPosition?: DraftScrollPosition): void {
     const {editorState} = this.props;
     const alreadyHasFocus = editorState.getSelection().getHasFocus();
-    const editorNode = ReactDOM.findDOMNode(this.refs.editor);
+    const editorNode = ReactDOM.findDOMNode(this.editor);
 
     const scrollParent = Style.getScrollParent(editorNode);
     const {x, y} = scrollPosition || getScrollPosition(scrollParent);
@@ -382,7 +387,7 @@ class DraftEditor extends React.Component {
   }
 
   _blur(): void {
-    const editorNode = ReactDOM.findDOMNode(this.refs.editor);
+    const editorNode = ReactDOM.findDOMNode(this.editor);
     invariant(
       editorNode instanceof HTMLElement,
       'editorNode is not an HTMLElement',

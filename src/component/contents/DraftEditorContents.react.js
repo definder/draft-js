@@ -98,6 +98,7 @@ class DraftEditorContents extends React.Component {
       customStyleMap,
       customStyleFn,
       editorState,
+      nameOffsetKey,
     } = this.props;
 
     const content = editorState.getCurrentContent();
@@ -130,6 +131,7 @@ class DraftEditorContents extends React.Component {
         : directionMap.get(key);
       const offsetKey = DraftOffsetKey.encode(key, 0, 0);
       const componentProps = {
+        nameOffsetKey,
         contentState: content,
         block,
         blockProps: customProps,
@@ -174,7 +176,7 @@ class DraftEditorContents extends React.Component {
         className,
         'data-block': true,
         'data-editor': this.props.editorKey,
-        'data-offset-key': offsetKey,
+        [nameOffsetKey]: offsetKey,
         key,
       };
       if (customEditable !== undefined) {
@@ -223,7 +225,7 @@ class DraftEditorContents extends React.Component {
           info.wrapperTemplate,
           {
             key: info.key + '-wrap',
-            'data-offset-key': info.offsetKey,
+            [nameOffsetKey]: info.offsetKey,
           },
           blocks,
         );

@@ -174,6 +174,12 @@ export type DraftEditorProps = {
   // an element tag and an optional react element wrapper. This configuration
   // is used for both rendering and paste processing.
   blockRenderMap: DraftBlockRenderMap,
+
+  //Naming data attribute for block
+  nameOffsetKey: string,
+
+  //Disable handler action
+  disabledHandlers: boolean,
 };
 
 export type DraftEditorDefaultProps = {
@@ -184,4 +190,6 @@ export type DraftEditorDefaultProps = {
   readOnly: boolean,
   spellCheck: boolean,
   stripPastedStyles: boolean,
+  nameOffsetKey: string,
+  disabledHandlers: boolean,
 };
