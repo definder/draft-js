@@ -41,6 +41,7 @@ const {List, Map, OrderedMap} = Immutable;
 const decodeBlockNodeConfig = (
   block: RawDraftContentBlock,
   entityMap: *,
+  relationEntityMapKey: Object,
 ): BlockNodeConfig => {
   const {key, type, data, text, depth} = block;
 
@@ -50,7 +51,7 @@ const decodeBlockNodeConfig = (
     type: type || 'unstyled',
     key: key || generateRandomKey(),
     data: Map(data),
-    characterList: decodeCharacterList(block, entityMap),
+    characterList: decodeCharacterList(block, entityMap, relationEntityMapKey),
   };
 
   return blockNodeConfig;
@@ -59,6 +60,7 @@ const decodeBlockNodeConfig = (
 const decodeCharacterList = (
   block: RawDraftContentBlock,
   entityMap: *,
+  relationEntityMapKey: Object,
 ): List<CharacterMetadata> => {
   const {
     text,
@@ -68,18 +70,16 @@ const decodeCharacterList = (
 
   const entityRanges = rawEntityRanges || [];
   const inlineStyleRanges = rawInlineStyleRanges || [];
-console.log('decode', rawEntityRanges, entityMap.toJS(), entityRanges
-  .filter(range => { console.log('test', range.key); return entityMap.has(range.key)})
-  .map(range => ({...range, key: entityMap.get(range.key)})));
-  // Translate entity range keys to the DraftEntity map.
+
+  const filteredEntityRanges = entityRanges
+    .filter(range => relationEntityMapKey.hasOwnProperty(range.key))
+    .map(range => {
+      return {...range, key: relationEntityMapKey[range.key]};
+    });
+
   return createCharacterList(
     decodeInlineStyleRanges(text, inlineStyleRanges),
-    decodeEntityRanges(
-      text,
-      entityRanges
-        .filter(range => entityMap.hasOwnProperty(range.key))
-        .map(range => ({...range, key: entityMap[range.key]})),
-    ),
+    decodeEntityRanges(text, filteredEntityRanges),
   );
 };
 
@@ -201,11 +201,12 @@ const decodeContentBlockNodes = (
 const decodeContentBlocks = (
   blocks: Array<RawDraftContentBlock>,
   entityMap: *,
+  relationEntityMapKey: Object,
 ): BlockMap => {
   return OrderedMap(
     blocks.map((block: RawDraftContentBlock) => {
       const contentBlock = new ContentBlock(
-        decodeBlockNodeConfig(block, entityMap),
+        decodeBlockNodeConfig(block, entityMap, relationEntityMapKey),
       );
       return [contentBlock.getKey(), contentBlock];
     }),
@@ -215,6 +216,7 @@ const decodeContentBlocks = (
 const decodeRawBlocks = (
   rawState: RawDraftContentState,
   entityMap: *,
+  relationEntityMapKey: Object,
 ): BlockMap => {
   const isTreeRawBlock = Array.isArray(rawState.blocks[0].children);
   const rawBlocks =
@@ -228,6 +230,7 @@ const decodeRawBlocks = (
         ? DraftTreeAdapter.fromRawTreeStateToRawState(rawState).blocks
         : rawBlocks,
       entityMap,
+      relationEntityMapKey,
     );
   }
 
@@ -236,6 +239,8 @@ const decodeRawBlocks = (
 
 const decodeRawEntityMap = (rawState: RawDraftContentState): * => {
   const {entityMap: rawEntityMap} = rawState;
+
+  let relationEntityMapKey = {};
 
   const entityMap = Object.keys(rawEntityMap).reduce(
     (updatedEntityMap, storageKey) => {
@@ -247,12 +252,14 @@ const decodeRawEntityMap = (rawState: RawDraftContentState): * => {
         data: data || {},
       });
       const tempEntityMap = addEntityToEntityMap(updatedEntityMap, instance);
+      const newKey = tempEntityMap.keySeq().last();
+      relationEntityMapKey[storageKey] = newKey;
       return tempEntityMap;
     },
     OrderedMap(),
   );
 
-  return entityMap;
+  return {entityMap, relationEntityMapKey};
 };
 
 const convertFromRawToDraftState = (
@@ -261,10 +268,10 @@ const convertFromRawToDraftState = (
   invariant(Array.isArray(rawState.blocks), 'invalid RawDraftContentState');
 
   // decode entities
-  const entityMap = decodeRawEntityMap(rawState);
+  const {entityMap, relationEntityMapKey} = decodeRawEntityMap(rawState);
 
   // decode blockMap
-  const blockMap = decodeRawBlocks(rawState, entityMap);
+  const blockMap = decodeRawBlocks(rawState, entityMap, relationEntityMapKey);
 
   // create initial selection
   const selectionState = blockMap.isEmpty()
