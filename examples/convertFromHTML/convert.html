@@ -20,8 +20,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   </head>
   <body>
     <div id="target"></div>
-    <script src="../../node_modules/react/dist/react.js"></script>
-    <script src="../../node_modules/react-dom/dist/react-dom.js"></script>
+    <script src="../../node_modules/react/umd/react.development.js"></script>
+    <script src="../../node_modules/react-dom/umd/react-dom.development.js"></script>
     <script src="../../node_modules/immutable/dist/immutable.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
     <script src="../../node_modules/es6-shim/es6-shim.js"></script>
@@ -104,7 +104,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         }
       }
 
-      function findLinkEntities(contentState, contentBlock, callback) {
+      function findLinkEntities(contentBlock, callback ,contentState) {
         contentBlock.findEntityRanges(
           (character) => {
             const entityKey = character.getEntity();
@@ -126,7 +126,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         );
       };
 
-      function findImageEntities(contentState, contentBlock, callback) {
+      function findImageEntities(contentBlock, callback, contentState) {
         contentBlock.findEntityRanges(
           (character) => {
             const entityKey = character.getEntity();

@@ -18,6 +18,7 @@ import type CharacterMetadata from 'CharacterMetadata';
 import type {RawDraftContentBlock} from 'RawDraftContentBlock';
 import type {RawDraftContentState} from 'RawDraftContentState';
 
+const DraftEntityInstance = require('DraftEntityInstance');
 const addEntityToEntityMap = require('addEntityToEntityMap');
 const ContentBlock = require('ContentBlock');
 const ContentBlockNode = require('ContentBlockNode');
@@ -67,7 +68,9 @@ const decodeCharacterList = (
 
   const entityRanges = rawEntityRanges || [];
   const inlineStyleRanges = rawInlineStyleRanges || [];
-
+console.log('decode', rawEntityRanges, entityMap.toJS(), entityRanges
+  .filter(range => { console.log('test', range.key); return entityMap.has(range.key)})
+  .map(range => ({...range, key: entityMap.get(range.key)})));
   // Translate entity range keys to the DraftEntity map.
   return createCharacterList(
     decodeInlineStyleRanges(text, inlineStyleRanges),
@@ -236,8 +239,8 @@ const decodeRawEntityMap = (rawState: RawDraftContentState): * => {
 
   const entityMap = Object.keys(rawEntityMap).reduce(
     (updatedEntityMap, storageKey) => {
-      var encodedEntity = entityMap[storageKey];
-      var {type, mutability, data} = encodedEntity;
+      const encodedEntity = rawEntityMap[storageKey];
+      const {type, mutability, data} = encodedEntity;
       const instance = new DraftEntityInstance({
         type,
         mutability,
