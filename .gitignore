@@ -4,7 +4,16 @@ dist/
 lib/
 build/
 node_modules
-website/src/docs/
 npm-debug.log
 !website/static/
 yarn-error.log
+
+/website/src/docs/
+/website/build/
+/website/node_modules/
+/website/src/lib/
+
+/examples/tex/node_modules/
+/examples/universal/static
+/examples/universal/yarn.lock
+/examples/universal/node_modules

@@ -6,13 +6,14 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
- * @format
- * @flow strict-local
+ * @providesModule Draft
  */
 
 'use strict';
 
-import type DraftEntityInstance from 'DraftEntityInstance';
-import type {OrderedMap} from 'immutable';
+var React = require('react');
+var ReactDom = require('react-dom');
 
-export type EntityMap = OrderedMap<string, DraftEntityInstance>;
+var SimpleEditor = require('./editor.js').SimpleEditor;
+
+ReactDom.render(<SimpleEditor />, document.getElementById('react-content'));

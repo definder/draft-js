@@ -21,11 +21,12 @@ const CharacterMetadata = require('CharacterMetadata');
 const ContentBlock = require('ContentBlock');
 const ContentBlockNode = require('ContentBlockNode');
 const DefaultDraftBlockRenderMap = require('DefaultDraftBlockRenderMap');
-const DraftEntity = require('DraftEntity');
+const DraftEntityInstance = require('DraftEntityInstance');
 const {List, Map, OrderedSet} = require('immutable');
 const URI = require('URI');
 
 const cx = require('cx');
+const addEntityToEntityMap = require('addEntityToEntityMap');
 const generateRandomKey = require('generateRandomKey');
 const getSafeBodyFromHTML = require('getSafeBodyFromHTML');
 const gkx = require('gkx');
@@ -246,7 +247,7 @@ class ContentBlocksBuilder {
     this.currentEntity = null;
     this.currentStyle = OrderedSet();
     this.currentText = '';
-    this.entityMap = DraftEntity;
+    this.entityMap = EntityMap;
     this.wrapper = 'ul';
     this.contentBlocks = [];
   }
@@ -526,12 +527,16 @@ class ContentBlocksBuilder {
       }
     });
 
-    // TODO: T15530363 update this when we remove DraftEntity entirely
-    this.currentEntity = this.entityMap.__create(
-      'IMAGE',
-      'MUTABLE',
-      entityConfig,
+    let newEntityMap = addEntityToEntityMap(
+      this.entityMap,
+      new DraftEntityInstance({
+        type: 'IMAGE',
+        mutability: 'MUTABLE',
+        data: entityConfig || {},
+      }),
     );
+    this.entityMap = newEntityMap;
+    this.currentEntity = newEntityMap.keySeq().last();
 
     // The child text node cannot just have a space or return as content -
     // we strip those out.
@@ -563,12 +568,16 @@ class ContentBlocksBuilder {
     });
 
     entityConfig.url = new URI(anchor.href).toString();
-    // TODO: T15530363 update this when we remove DraftEntity completely
-    this.currentEntity = this.entityMap.__create(
-      'LINK',
-      'MUTABLE',
-      entityConfig || {},
+    let newEntityMap = addEntityToEntityMap(
+      this.entityMap,
+      new DraftEntityInstance({
+        type: 'IMAGE',
+        mutability: 'MUTABLE',
+        data: entityConfig || {},
+      }),
     );
+    this.entityMap = newEntityMap;
+    this.currentEntity = newEntityMap.keySeq().last();
 
     blockConfigs.push(...this._toBlockConfigs(Array.from(node.childNodes)));
     this.currentEntity = null;

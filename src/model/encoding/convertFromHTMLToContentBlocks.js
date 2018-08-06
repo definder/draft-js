@@ -23,11 +23,12 @@ const CharacterMetadata = require('CharacterMetadata');
 const ContentBlock = require('ContentBlock');
 const ContentBlockNode = require('ContentBlockNode');
 const DefaultDraftBlockRenderMap = require('DefaultDraftBlockRenderMap');
-const DraftEntity = require('DraftEntity');
+const DraftEntityInstance = require('DraftEntityInstance');
 const Immutable = require('immutable');
 const {Set} = require('immutable');
 const URI = require('URI');
 
+const addEntityToEntityMap = require('addEntityToEntityMap');
 const cx = require('cx');
 const generateRandomKey = require('generateRandomKey');
 const getSafeBodyFromHTML = require('getSafeBodyFromHTML');
@@ -51,7 +52,7 @@ type Chunk = {
   blocks: Array<Block>,
 };
 
-const {List, OrderedSet} = Immutable;
+const {List, OrderedSet, OrderedMap} = Immutable;
 
 const NBSP = '&nbsp;';
 const SPACE = ' ';
@@ -450,8 +451,15 @@ const genFragment = (
     // See https://github.com/facebook/draft-js/issues/231 for some context.
     node.textContent = '\ud83d\udcf7';
 
-    // TODO: update this when we remove DraftEntity entirely
-    inEntity = DraftEntity.__create('IMAGE', 'MUTABLE', entityConfig || {});
+    newEntityMap = addEntityToEntityMap(
+      newEntityMap,
+      new DraftEntityInstance({
+        type: 'IMAGE',
+        mutability: 'MUTABLE',
+        data: entityConfig || {},
+      }),
+    );
+    inEntity = newEntityMap.keySeq().last();
   }
 
   // Inline tags
@@ -518,8 +526,15 @@ const genFragment = (
       });
 
       entityConfig.url = new URI(anchor.href).toString();
-      // TODO: update this when we remove DraftEntity completely
-      entityId = DraftEntity.__create('LINK', 'MUTABLE', entityConfig || {});
+      newEntityMap = addEntityToEntityMap(
+        newEntityMap,
+        new DraftEntityInstance({
+          type: 'LINK',
+          mutability: 'MUTABLE',
+          data: entityConfig || {},
+        }),
+      );
+      entityId = newEntityMap.keySeq().last();
     } else {
       entityId = undefined;
     }
@@ -761,12 +776,11 @@ const convertFromHTMLtoContentBlocks = (
   // arbitrary code in whatever environment you're running this in. For an
   // example of how we try to do this in-browser, see getSafeBodyFromHTML.
 
-  // TODO: replace DraftEntity with an OrderedMap here
   const chunkData = getChunkForHTML(
     html,
     DOMBuilder,
     blockRenderMap,
-    DraftEntity,
+    OrderedMap(),
   );
 
   if (chunkData == null) {

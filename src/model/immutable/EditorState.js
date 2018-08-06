@@ -590,9 +590,11 @@ function mustBecomeBoundary(
   const lastChangeType = editorState.getLastChangeType();
   return (
     changeType !== lastChangeType ||
-    (changeType !== 'insert-characters' &&
+    (
+      changeType !== 'insert-characters' &&
       changeType !== 'backspace-character' &&
-      changeType !== 'delete-character')
+      changeType !== 'delete-character'
+    )
   );
 }
 

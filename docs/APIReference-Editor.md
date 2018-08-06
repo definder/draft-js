@@ -35,7 +35,7 @@ placeholder?: string
 Optional placeholder string to display when the editor is empty.
 
 Note: You can use CSS to style or hide your placeholder as needed. For instance,
-in the [rich editor example](https://github.com/facebook/draft-js/tree/master/examples/draft-0-10-0/rich),
+in the [rich editor example](https://github.com/facebook/draft-js/tree/master/examples/rich),
 the placeholder is hidden when the user changes block styling in an empty editor.
 This is because the placeholder may not line up with the cursor when the style
 is changed.
@@ -274,6 +274,16 @@ own creation. Example: At Facebook, this is used to provide keyboard interaction
 for the mentions autocomplete menu that appears when typing a friend's name.
 You can find a more detailed explanation of this
 [here](/docs/advanced-topics-key-bindings.html).
+
+#### onEscape
+```
+onEscape?: (e: SyntheticKeyboardEvent) => void
+```
+
+#### onTab
+```
+onTab?: (e: SyntheticKeyboardEvent) => void
+```
 
 ### Mouse events
 

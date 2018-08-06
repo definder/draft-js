@@ -142,9 +142,9 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
     keyBindingFn: getDefaultKeyBinding,
     readOnly: false,
     disabledHandlers: false,
+    nameOffsetKey: 'data-offset-key',
     spellCheck: false,
     stripPastedStyles: false,
-    nameOffsetKey: 'data-offset-key',
   };
 
   _blockSelectEvents: boolean;
@@ -292,14 +292,14 @@ class DraftEditor extends React.Component<DraftEditorProps, State> {
 
   _renderPlaceholder(): React.Node {
     if (this._showPlaceholder()) {
-      const placeHolderProps = {
-        text: nullthrows(this.props.placeholder),
-        editorState: this.props.editorState,
-        textAlignment: this.props.textAlignment,
-        accessibilityID: this._placeholderAccessibilityID,
-      };
-
-      return <DraftEditorPlaceholder {...placeHolderProps} />;
+      return (
+        <DraftEditorPlaceholder
+          text={nullthrows(this.props.placeholder)}
+          editorState={this.props.editorState}
+          textAlignment={this.props.textAlignment}
+          accessibilityID={this._placeholderAccessibilityID}
+        />
+      );
     }
     return null;
   }

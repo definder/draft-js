@@ -53,6 +53,9 @@ type Props = {
 
   // The full text to be rendered within this node.
   text: string,
+
+  // The offset key name for this node
+  nameOffsetKey: string,
 };
 
 /**
@@ -113,11 +116,6 @@ class DraftEditorLeaf extends React.Component<Props> {
     setDraftEditorSelection(selection, targetNode, blockKey, start, end);
   }
 
-  constructor(props){
-    super(props);
-    this.nameOffsetKey = props.nameOffsetKey;
-  }
-
   shouldComponentUpdate(nextProps: Props): boolean {
     const leafNode = ReactDOM.findDOMNode(this.leaf);
     invariant(leafNode, 'Missing leafNode');
@@ -137,7 +135,10 @@ class DraftEditorLeaf extends React.Component<Props> {
   }
 
   render(): React.Node {
-    const {block} = this.props;
+    const {
+      block,
+      nameOffsetKey,
+    } = this.props;
     let {text} = this.props;
 
     // If the leaf is at the end of its block and ends in a soft newline, append
@@ -170,7 +171,7 @@ class DraftEditorLeaf extends React.Component<Props> {
     return React.createElement(
         'span',
         {
-          [this.nameOffsetKey]: offsetKey,
+          [nameOffsetKey]: offsetKey,
           'ref': ref => (this.leaf = ref),
           'style': styleObj,
         },

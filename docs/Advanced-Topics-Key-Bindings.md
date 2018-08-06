@@ -71,7 +71,7 @@ class MyEditor extends React.Component {
     this.handleKeyCommand = this.handleKeyCommand.bind(this);
   }
   // ...
-
+  
   handleKeyCommand(command: string): DraftHandleValue {
     if (command === 'myeditor-save') {
       // Perform a request to save your contents, set

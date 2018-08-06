@@ -56,9 +56,12 @@ function getEntityKeyForSelection(
  * Determine whether an entity key corresponds to a `MUTABLE` entity. If so,
  * return it. If not, return null.
  */
-function filterKey(entityMap: EntityMap, entityKey: ?string): ?string {
+function filterKey(
+  entityMap: EntityMap,
+  entityKey: ?string,
+): ?string {
   if (entityKey) {
-    const entity = entityMap.__get(entityKey);
+    const entity = entityMap.get(entityKey);
     return entity.getMutability() === 'MUTABLE' ? entityKey : null;
   }
   return null;

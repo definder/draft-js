@@ -15,7 +15,12 @@
 jest.disableAutomock();
 
 const CharacterMetadata = require('CharacterMetadata');
-const {BOLD, BOLD_ITALIC, NONE, UNDERLINE} = require('SampleDraftInlineStyle');
+const {
+  BOLD,
+  BOLD_ITALIC,
+  NONE,
+  UNDERLINE,
+} = require('SampleDraftInlineStyle');
 
 const plain = CharacterMetadata.create();
 const bold = CharacterMetadata.create({style: BOLD});
