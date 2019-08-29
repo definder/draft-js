@@ -71,7 +71,9 @@ const isBlockOnSelectionEdge = (
  * appropriate decorator and inline style components.
  */
 class DraftEditorBlock extends React.Component<Props> {
-  static defaultProps = 'data-offset-key';
+  static defaultProps = {
+    nameOffsetKey: 'data-offset-key',
+  };
 
   _node: ?HTMLDivElement;
 
