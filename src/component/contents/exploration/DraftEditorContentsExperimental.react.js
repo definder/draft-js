@@ -37,6 +37,7 @@ type Props = {
   editorKey?: string,
   editorState: EditorState,
   textDirectionality?: BidiDirection,
+  nameOffsetKey?: string,
 };
 
 /**
@@ -106,6 +107,7 @@ class DraftEditorContentsExperimental extends React.Component<Props> {
       editorState,
       editorKey,
       textDirectionality,
+      nameOffsetKey = 'data-offset-key',
     } = this.props;
 
     const content = editorState.getCurrentContent();
@@ -139,6 +141,7 @@ class DraftEditorContentsExperimental extends React.Component<Props> {
           ? textDirectionality
           : directionMap.get(blockKey),
         tree: editorState.getBlockTree(blockKey),
+        nameOffsetKey,
       };
 
       const configForType =
@@ -173,7 +176,7 @@ class DraftEditorContentsExperimental extends React.Component<Props> {
           info.wrapperTemplate,
           {
             key: info.key + '-wrap',
-            'data-offset-key': info.offsetKey,
+            [nameOffsetKey]: info.offsetKey,
           },
           blocks,
         );

@@ -36,7 +36,7 @@ function getDraftEditorSelectionWithNodes(
   anchorOffset: number,
   focusNode: Node,
   focusOffset: number,
-  nameOffsetKey: string,
+  nameOffsetKey?: string,
 ): DOMDerivedSelection {
   const anchorIsTextNode = anchorNode.nodeType === Node.TEXT_NODE;
   const focusIsTextNode = focusNode.nodeType === Node.TEXT_NODE;

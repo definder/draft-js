@@ -51,6 +51,8 @@ type Props = {
 
   // The full text to be rendered within this node.
   text: string,
+
+  nameOffsetKey?: string,
 };
 
 /**
@@ -63,6 +65,10 @@ type Props = {
  * maintain the selection state.
  */
 class DraftEditorLeaf extends React.Component<Props> {
+  static defaultProps = {
+    nameOffsetKey: 'data-offset-key',
+  };
+
   /**
    * By making individual leaf instances aware of their context within
    * the text of the editor, we can set our selection range more
@@ -111,11 +117,6 @@ class DraftEditorLeaf extends React.Component<Props> {
     setDraftEditorSelection(selection, targetNode, blockKey, start, end);
   }
 
-  constructor(props){
-    super(props);
-    this.nameOffsetKey = props.nameOffsetKey;
-  }
-
   shouldComponentUpdate(nextProps: Props): boolean {
     const leafNode = this.leaf;
     invariant(leafNode, 'Missing leafNode');
@@ -135,7 +136,7 @@ class DraftEditorLeaf extends React.Component<Props> {
   }
 
   render(): React.Node {
-    const {block} = this.props;
+    const {block, nameOffsetKey} = this.props;
     let {text} = this.props;
 
     // If the leaf is at the end of its block and ends in a soft newline, append
@@ -166,14 +167,14 @@ class DraftEditorLeaf extends React.Component<Props> {
       styleObj = Object.assign(styleObj, newStyles);
     }
     return React.createElement(
-        'span',
-        {
-          [this.nameOffsetKey]: offsetKey,
-          'ref': ref => (this.leaf = ref),
-          'style': styleObj,
-        },
-        <DraftEditorTextNode>{text}</DraftEditorTextNode>
-    )
+      'span',
+      {
+        [nameOffsetKey]: offsetKey,
+        ref: ref => (this.leaf = ref),
+        style: styleObj,
+      },
+      <DraftEditorTextNode>{text}</DraftEditorTextNode>,
+    );
   }
 }
 

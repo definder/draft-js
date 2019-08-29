@@ -65,6 +65,7 @@ type Props = {
   selection: SelectionState,
   startIndent?: boolean,
   tree: List<any>,
+  nameOffsetKey?: string,
 };
 
 /**
@@ -94,6 +95,7 @@ const shouldNotAddWrapperElement = (
 };
 
 const applyWrapperElementToSiblings = (
+  nameOffsetKey: string,
   wrapperTemplate: *,
   Element: string,
   nodes: Array<React.Node>,
@@ -120,7 +122,7 @@ const applyWrapperElementToSiblings = (
       wrapperTemplate,
       {
         key: `${key}-wrap`,
-        'data-offset-key': DraftOffsetKey.encode(key, 0, 0),
+        [nameOffsetKey]: DraftOffsetKey.encode(key, 0, 0),
       },
       childrenIs,
     ),
@@ -171,6 +173,7 @@ const getCustomRenderConfig = (
 
 const getElementPropsConfig = (
   block: BlockNodeRecord,
+  nameOffsetKey: string,
   editorKey: string,
   offsetKey: string,
   blockStyleFn: BlockStyleFn,
@@ -179,7 +182,7 @@ const getElementPropsConfig = (
   let elementProps: Object = {
     'data-block': true,
     'data-editor': editorKey,
-    'data-offset-key': offsetKey,
+    [nameOffsetKey]: offsetKey,
     key: block.getKey(),
   };
   const customClass = blockStyleFn(block);
@@ -200,6 +203,10 @@ const getElementPropsConfig = (
 };
 
 class DraftEditorBlockNode extends React.Component<Props> {
+  static defaultProps = {
+    nameOffsetKey: 'data-offset-key',
+  };
+
   shouldComponentUpdate(nextProps: Props): boolean {
     const {block, direction, tree} = this.props;
     const isContainerNode = !block.getChildKeys().isEmpty();
@@ -283,6 +290,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
       forceSelection,
       selection,
       tree,
+      nameOffsetKey,
     } = this.props;
 
     let children = null;
@@ -299,6 +307,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
         );
         const elementProps = getElementPropsConfig(
           child,
+          nameOffsetKey,
           editorKey,
           offsetKey,
           blockStyleFn,
@@ -330,7 +339,12 @@ class DraftEditorBlockNode extends React.Component<Props> {
         // if we are here it means we are the last block
         // that has a wrapperTemplate so we should wrap itself
         // and all other previous siblings that share the same wrapper
-        applyWrapperElementToSiblings(wrapperTemplate, Element, acc);
+        applyWrapperElementToSiblings(
+          nameOffsetKey,
+          wrapperTemplate,
+          Element,
+          acc,
+        );
 
         return acc;
       }, []);
@@ -363,6 +377,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
           hasSelection={isBlockOnSelectionEdge(selection, blockKey)}
           selection={selection}
           tree={tree}
+          nameOffsetKey={nameOffsetKey}
         />
       );
 
@@ -373,6 +388,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
     const {Element} = getDraftRenderConfig(block, blockRenderMap);
     const elementProps = getElementPropsConfig(
       block,
+      nameOffsetKey,
       editorKey,
       offsetKey,
       blockStyleFn,

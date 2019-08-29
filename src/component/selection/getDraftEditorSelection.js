@@ -23,7 +23,7 @@ const getDraftEditorSelectionWithNodes = require('getDraftEditorSelectionWithNod
 function getDraftEditorSelection(
   editorState: EditorState,
   root: HTMLElement,
-  nameOffsetKey: string,
+  nameOffsetKey?: string,
 ): DOMDerivedSelection {
   const selection = global.getSelection();
 

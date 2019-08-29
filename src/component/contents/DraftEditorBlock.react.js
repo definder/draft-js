@@ -51,6 +51,7 @@ type Props = {
   selection: SelectionState,
   startIndent?: boolean,
   tree: List<any>,
+  nameOffsetKey?: string,
 };
 
 /**
@@ -70,6 +71,8 @@ const isBlockOnSelectionEdge = (
  * appropriate decorator and inline style components.
  */
 class DraftEditorBlock extends React.Component<Props> {
+  static defaultProps = 'data-offset-key';
+
   _node: ?HTMLDivElement;
 
   shouldComponentUpdate(nextProps: Props): boolean {
@@ -228,7 +231,7 @@ class DraftEditorBlock extends React.Component<Props> {
   }
 
   render(): React.Node {
-    const {direction, offsetKey} = this.props;
+    const {direction, offsetKey, nameOffsetKey} = this.props;
     const className = cx({
       'public/DraftStyleDefault/block': true,
       'public/DraftStyleDefault/ltr': direction === 'LTR',
@@ -238,8 +241,8 @@ class DraftEditorBlock extends React.Component<Props> {
     return React.createElement(
       'div',
       {
-        [this.props.nameOffsetKey]: offsetKey,
-        ref={ref => (this._node = ref)}
+        [nameOffsetKey]: offsetKey,
+        ref: ref => (this._node = ref),
         className,
       },
       this._renderChildren(),

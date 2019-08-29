@@ -42,9 +42,14 @@ type Props = {
   hasSelection: boolean,
   selection: SelectionState,
   tree: List<any>,
+  nameOffsetKey: string,
 };
 
 class DraftEditorNode extends React.Component<Props> {
+  static defaultProps = {
+    nameOffsetKey: 'data-offset-key',
+  };
+
   render(): React.Node {
     const {
       block,
@@ -57,6 +62,7 @@ class DraftEditorNode extends React.Component<Props> {
       hasSelection,
       selection,
       tree,
+      nameOffsetKey,
     } = this.props;
 
     const blockKey = block.getKey();
@@ -88,6 +94,7 @@ class DraftEditorNode extends React.Component<Props> {
                   customStyleMap={customStyleMap}
                   customStyleFn={customStyleFn}
                   isLast={decoratorKey === lastLeafSet && jj === lastLeaf}
+                  nameOffsetKey={nameOffsetKey}
                 />
               );
             })
@@ -113,16 +120,17 @@ class DraftEditorNode extends React.Component<Props> {
         })
         .toArray();
 
-    return (
-      <div
-        data-offset-key={DraftOffsetKey.encode(blockKey, 0, 0)}
-        className={cx({
+    return React.createElement(
+      'div',
+      {
+        [nameOffsetKey]: DraftOffsetKey.encode(blockKey, 0, 0),
+        className: cx({
           'public/DraftStyleDefault/block': true,
           'public/DraftStyleDefault/ltr': direction === 'LTR',
           'public/DraftStyleDefault/rtl': direction === 'RTL',
-        })}>
-        {children}
-      </div>
+        }),
+      },
+      children,
     );
   }
 }
