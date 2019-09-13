@@ -56,11 +56,7 @@ const getListItemClasses = (
       type === 'unordered-list-item',
     'public/DraftStyleDefault/orderedListItem': type === 'ordered-list-item',
     'public/DraftStyleDefault/reset': shouldResetCount,
-    'public/DraftStyleDefault/depth0': depth === 0,
-    'public/DraftStyleDefault/depth1': depth === 1,
-    'public/DraftStyleDefault/depth2': depth === 2,
-    'public/DraftStyleDefault/depth3': depth === 3,
-    'public/DraftStyleDefault/depth4': depth >= 4,
+    ['public/DraftStyleDefault/depth' + (depth >= 7 ? 7 : depth || 0)]: true,
     'public/DraftStyleDefault/listLTR': direction === 'LTR',
     'public/DraftStyleDefault/listRTL': direction === 'RTL',
   });
