@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow
+ * @flow strict-local
  * @emails oncall+draft_js
  */
 
@@ -19,17 +19,29 @@ const DraftEditorTextNode = require('DraftEditorTextNode.react');
 const React = require('React');
 
 const invariant = require('invariant');
-const setDraftEditorSelection = require('setDraftEditorSelection');
+const isHTMLBRElement = require('isHTMLBRElement');
+const setDraftEditorSelection = require('setDraftEditorSelection')
+  .setDraftEditorSelection;
+
+type CSSStyleObject = {
+  [property: string]: string | number,
+};
+
+type CustomStyleMap = {[name: string]: CSSStyleObject};
+type CustomStyleFn = (
+  style: DraftInlineStyle,
+  block: BlockNodeRecord,
+) => ?CSSStyleObject;
 
 type Props = {
   // The block that contains this leaf.
   block: BlockNodeRecord,
 
   // Mapping of style names to CSS declarations.
-  customStyleMap: Object,
+  customStyleMap: CustomStyleMap,
 
   // Function that maps style names to CSS style objects.
-  customStyleFn: Function,
+  customStyleFn: CustomStyleFn,
 
   // Whether to force the DOM selection after render.
   forceSelection: boolean,
@@ -107,7 +119,7 @@ class DraftEditorLeaf extends React.Component<Props> {
 
     if (child.nodeType === Node.TEXT_NODE) {
       targetNode = child;
-    } else if (child instanceof Element && child.tagName === 'BR') {
+    } else if (isHTMLBRElement(child)) {
       targetNode = node;
     } else {
       targetNode = child.firstChild;

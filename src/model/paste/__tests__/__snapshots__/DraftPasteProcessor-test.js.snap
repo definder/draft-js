@@ -36,33 +36,23 @@ Array [
       },
       Object {
         "entity": null,
-        "style": Array [
-          "BOLD",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "BOLD",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "BOLD",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "BOLD",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "BOLD",
-        ],
+        "style": Array [],
       },
     ],
     "data": Object {},
@@ -110,33 +100,23 @@ Array [
       },
       Object {
         "entity": null,
-        "style": Array [
-          "ITALIC",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "ITALIC",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "ITALIC",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "ITALIC",
-        ],
+        "style": Array [],
       },
       Object {
         "entity": null,
-        "style": Array [
-          "ITALIC",
-        ],
+        "style": Array [],
       },
     ],
     "data": Object {},
@@ -1608,16 +1588,11 @@ Array [
         "entity": null,
         "style": Array [],
       },
-      Object {
-        "entity": null,
-        "style": Array [],
-      },
     ],
     "data": Object {},
     "depth": 0,
     "key": "key2",
-    "text": "what
-one
+    "text": "whatone
 two
 ",
     "type": "unordered-list-item",

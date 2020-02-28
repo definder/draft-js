@@ -28,7 +28,6 @@ import type {BidiDirection} from 'UnicodeBidiDirection';
 const DraftEditorNode = require('DraftEditorNode.react');
 const DraftOffsetKey = require('DraftOffsetKey');
 const React = require('React');
-const ReactDOM = require('ReactDOM');
 const Scroll = require('Scroll');
 const Style = require('Style');
 
@@ -37,6 +36,7 @@ const getScrollPosition = require('getScrollPosition');
 const getViewportDimensions = require('getViewportDimensions');
 const Immutable = require('immutable');
 const invariant = require('invariant');
+const isHTMLElement = require('isHTMLElement');
 
 const SCROLL_BUFFER = 10;
 
@@ -178,12 +178,14 @@ const getElementPropsConfig = (
   offsetKey: string,
   blockStyleFn: BlockStyleFn,
   customConfig: *,
+  ref: null | {|current: null | Element|},
 ): Object => {
   let elementProps: Object = {
     'data-block': true,
     'data-editor': editorKey,
     [nameOffsetKey]: offsetKey,
     key: block.getKey(),
+    ref,
   };
   const customClass = blockStyleFn(block);
 
@@ -206,6 +208,8 @@ class DraftEditorBlockNode extends React.Component<Props> {
   static defaultProps = {
     nameOffsetKey: 'data-offset-key',
   };
+
+  wrapperRef: {|current: null | Element|} = React.createRef<Element>();
 
   shouldComponentUpdate(nextProps: Props): boolean {
     const {block, direction, tree} = this.props;
@@ -241,7 +245,11 @@ class DraftEditorBlockNode extends React.Component<Props> {
       return;
     }
 
-    const blockNode = ReactDOM.findDOMNode(this);
+    const blockNode = this.wrapperRef.current;
+    if (!blockNode) {
+      // This Block Node was rendered without a wrapper element.
+      return;
+    }
     const scrollParent = Style.getScrollParent(blockNode);
     const scrollPosition = getScrollPosition(scrollParent);
     let scrollDelta;
@@ -258,11 +266,9 @@ class DraftEditorBlockNode extends React.Component<Props> {
         );
       }
     } else {
-      invariant(
-        blockNode instanceof HTMLElement,
-        'blockNode is not an HTMLElement',
-      );
-      const blockBottom = blockNode.offsetHeight + blockNode.offsetTop;
+      invariant(isHTMLElement(blockNode), 'blockNode is not an HTMLElement');
+      const htmlBlockNode: HTMLElement = (blockNode: any);
+      const blockBottom = htmlBlockNode.offsetHeight + htmlBlockNode.offsetTop;
       const scrollBottom = scrollParent.offsetHeight + scrollPosition.y;
       scrollDelta = blockBottom - scrollBottom;
       if (scrollDelta > 0) {
@@ -312,6 +318,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
           offsetKey,
           blockStyleFn,
           customConfig,
+          null,
         );
         const childProps = {
           ...this.props,
@@ -393,6 +400,7 @@ class DraftEditorBlockNode extends React.Component<Props> {
       offsetKey,
       blockStyleFn,
       customConfig,
+      this.wrapperRef,
     );
 
     // root block nodes needs to be wrapped

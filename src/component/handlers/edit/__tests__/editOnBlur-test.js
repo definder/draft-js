@@ -5,12 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @emails oncall+draft_js
+ * @flow strict-local
  * @format
  */
 
 'use strict';
-
-jest.disableAutomock();
 
 const ContentBlock = require('ContentBlock');
 const ContentState = require('ContentState');
@@ -29,8 +28,8 @@ const getEditorState = (text: string = 'Arsenal') => {
   );
 };
 
-const getBlurEvent = data => ({
-  data,
+const getBlurEvent = currentTarget => ({
+  currentTarget,
 });
 
 function withGlobalGetSelectionAs(getSelectionValue = {}, callback) {
@@ -68,7 +67,8 @@ test('editor removes selection on blur (default behaviour)', () => {
       editor: editorNode,
     };
 
-    onBlur(editor, getBlurEvent());
+    // $FlowExpectedError
+    onBlur(editor, getBlurEvent(editorNode));
 
     expect(globalSelection.removeAllRanges).toHaveBeenCalledTimes(1);
   });
@@ -97,7 +97,8 @@ test('editor preserves selection on blur', () => {
       editor: editorNode,
     };
 
-    onBlur(editor, getBlurEvent());
+    // $FlowExpectedError
+    onBlur(editor, getBlurEvent(editorNode));
 
     expect(globalSelection.removeAllRanges).toHaveBeenCalledTimes(0);
   });

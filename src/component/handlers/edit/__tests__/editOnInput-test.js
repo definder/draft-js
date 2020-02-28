@@ -11,8 +11,6 @@
 
 'use strict';
 
-jest.disableAutomock();
-
 const ContentBlock = require('ContentBlock');
 const ContentState = require('ContentState');
 const EditorState = require('EditorState');
@@ -44,21 +42,24 @@ function withGlobalGetSelectionAs(getSelectionValue = {}, callback) {
 }
 
 test('restoreEditorDOM and keyCommandPlainBackspace are NOT called when the `inputType` is not from a backspace press', () => {
-  const inputEvent = {
-    nativeEvent: {inputType: 'insetText'},
-  };
   const anchorNodeText = 'react draftjs';
   const globalSelection = {
     anchorNode: document.createTextNode(anchorNodeText),
   };
   withGlobalGetSelectionAs(globalSelection, () => {
     const editorState = getEditorState(anchorNodeText);
-
+    const editorNode = document.createElement('div');
     const editor = {
       _latestEditorState: editorState,
       props: {},
       update: jest.fn(),
       restoreEditorDOM: jest.fn(),
+      editor: editorNode,
+    };
+
+    const inputEvent = {
+      nativeEvent: {inputType: 'insetText'},
+      currentTarget: editorNode,
     };
 
     // $FlowExpectedError
@@ -71,23 +72,26 @@ test('restoreEditorDOM and keyCommandPlainBackspace are NOT called when the `inp
 });
 
 test('restoreEditorDOM and keyCommandPlainBackspace are called when backspace is pressed', () => {
-  const inputEvent = {
-    // When Backspace is pressed and input-type is supported, an event with
-    // inputType === 'deleteContentBackward' is triggered by the browser.
-    nativeEvent: {inputType: 'deleteContentBackward'},
-  };
   const anchorNodeText = 'react draftjs';
   const globalSelection = {
     anchorNode: document.createTextNode(anchorNodeText),
   };
   withGlobalGetSelectionAs(globalSelection, () => {
     const editorState = getEditorState(anchorNodeText);
-
+    const editorNode = document.createElement('div');
     const editor = {
       _latestEditorState: editorState,
       props: {},
       update: jest.fn(),
       restoreEditorDOM: jest.fn(),
+      editor: editorNode,
+    };
+
+    const inputEvent = {
+      // When Backspace is pressed and input-type is supported, an event with
+      // inputType === 'deleteContentBackward' is triggered by the browser.
+      nativeEvent: {inputType: 'deleteContentBackward'},
+      currentTarget: editorNode,
     };
 
     // $FlowExpectedError

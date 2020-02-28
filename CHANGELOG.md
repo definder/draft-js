@@ -4,6 +4,128 @@ Notable changes to Draft.js will be documented in this file.
 
 Changes to `src` are live in production on facebook.com at the time of release.
 
+## 0.11.4 (January 7th, 2020)
+
+### Added
+* Add Section and Article to DefaultBlockRenderMap (#2212) (Tarun047 in e20f79f)
+
+### Changed
+* Add rules to .flowconfig for flow strict rules (#2288) (Kevin Chavez in f223799)
+* Update website's yarn version to 0.11.3 (Kevin Chavez in efcaf42)
+* Prettify docs files (#2275) (Yangshun Tay in 6fc9964)
+* Remove Jest auto mocking (#2279) (Yangshun Tay in 817e371)
+* Add myself to get TravisCI emails (Kevin Chavez in f4167fe)
+* Unit tests for isHTMLBRElement (Claudio Procida in bb81765)
+* Remove niveditc from Travis CI email (Nivedita Chopra in 7721805)
+* Create CNAME (#2276) (Yangshun Tay in 92680be)
+* Upgrade to Docusaurus 2 (#2268) (Yangshun Tay in 5b10191)
+* move alex to dev dependencies (#2272) (Ilya in b889d5d)
+* Improve docs syntax and formatting (#2267) (Yangshun Tay in 9b4a628)
+
+### Fixed
+* fix(chore): fixes webpack-stream error with missing catch var declaration (#2291) (Claudio Procida in 4252469)
+* IE could not display composer when opening or creating a new group chat from the chat create view (Jainil Parekh in 64b51df)
+* Fix DOMObserver mutation data for IE (#2285) (Jainil Parekh in afb708f)
+* Added tests and fixed IE IndexSizeError trying to get a range from a selection when there is not one (#2271) (Lauren Wyatt in aa55de2)
+* Fix scroll behavior when node has tab chars (#2256) (cdr in 5d37c03)
+* Fix docs links in readme (#2284) (Lucas Cordeiro in 3b6d231)
+* Fix isHTMLBRElement test (#2278) (Yangshun Tay in 0603772)
+* Fix `isHTMLBRElement` check (Jack Armstrong in e869fcb)
+* Fix typing Chinese in Edge (#2082) (#2088) (Robbert Brak in 8c0727e)
+* Fix Travis website deployment (#2274) (Yangshun Tay in 861aab8)
+* getEntityKeyForSelection.js (Kevin Chavez in c07a404)
+
+## 0.11.3 (December 2nd, 2019)
+
+### Added
+* Take over enhancements to render Draft.js in an iframe (#1938) (Claudio Procida in dceddf5)
+* Implement click listener for editor wrapper (#2230) (Max Vyz in 8f77aa3)
+* Add linting for insensitive and inconsiderate language (#2223) (Claudio Procida in 5dd99d3)
+
+### Changed
+* Updates to Prettier 1.19.1 (#2265) (Claudio Procida in abcbe20)
+* Bump mixin-deep from 1.3.1 to 1.3.2 in /examples/draft-0-10-0/universal (#2259) (dependabot[bot] in 37d281b)
+* Upgrade dependencies in /website (#2263) (Kevin Chavez in 0b57720)
+* Update dependencies in examples/draft-0-10-0/universal (#2257) (Kevin Chavez in ae2dd14)
+* Update dependencies in examples/draft-0-10-0/playground (#2258) (Kevin Chavez in 11bc5d8)
+* Prettify files rest of non-intern files in html/ (George Zahariev in 6217dc8)
+* add flow declaration in editOnBeforeInput-test.js (Frank Thompson in 0601090)
+* Bump lodash.merge from 4.6.1 to 4.6.2 in /website (#2241) (dependabot[bot] in 177db5e)
+* Defaulting to createEmpty if block map is empty in createWithContent (Fixes issue #2226) (#2240) (David Fuentes in c42662e)
+* Bump handlebars from 4.1.1 to 4.5.1 in /examples/draft-0-10-0/playground (#2242) (dependabot[bot] in 2a761af)
+* Suppress non-synced files in www for 0.111 (Jordan Brown in 4bca140)
+* Upgrade more deps. (#2239) (Kevin Chavez in a477e83)
+* Bump lodash.template from 4.4.0 to 4.5.0 in /examples/draft-0-10-0/playground (#2236) (dependabot[bot] in 0e03745)
+* Bump mixin-deep from 1.3.1 to 1.3.2 in /website (#2234) (dependabot[bot] in 78f20cc)
+* Bump lodash from 4.17.11 to 4.17.15 in /website (#2233) (dependabot[bot] in da1ab7c)
+* Updated browser icons in README (#2238) (SuNNjek in 6ed6ed4)
+* Bump mixin-deep from 1.3.1 to 1.3.2 in /examples/draft-0-10-0/playground (#2235) (dependabot[bot] in 2744ff7)
+* Upgrade 8 dependencies (including jest, @babel/core, etc). (#2237) (Kevin Chavez in 46103ac)
+* Upgrades ESLint and related plugins/configs. (#2231) (Kevin Chavez in 53d2a63)
+
+### Fixed
+* fix wrong property access in convertFromHTMLToContentBlocks (Frank Thompson in 7d26fab)
+* Fix draftjs type error for event (Jack Armstrong in e7ae2e7)
+* fix decorator handling in editOnBeforeInput (Frank Thompson in 1452b87)
+* fixes #304, kudos to @andpor (#2197) (Ante Beslic in 2908035)
+* Fix playground example import (#2220) (Ryan Lee in 778e88d)
+* Fix React warnings (#2221) (Alan Norbauer in 2595016)
+
+### Meta
+* deploy v112 to www (Daniel Sainati in ae542b7)
+
+## 0.11.2 (September 30th, 2019)
+
+### Changed
+
+* Upgrade to Flow strict-local (generatedunixname89002005287564 in 0c92bf7)
+* chore(website): updates stylesheet for 0.11.1 (#2188) (Claudio Procida in 543df66)
+* Prepare 0.11.1 (#2186) (Claudio Procida in 3adf593)
+
+### Fixed
+
+* fix(selection): Returns previous selection if either leaf is null (#2189) (Claudio Procida in fe68e43)
+
+## 0.11.1 (September 19th, 2019)
+
+### Added
+* Support post processor on paste entities. (Tee Xie in 3043573)
+* Adding 'preserveSelectionOnBlur' prop (#2128) (Matthew Holloway in db792ef)
+
+### Changed
+* Reaping draft_segmented_entities_behavior (Mohamed Moussa in cd4adaa)
+* Make insertIntoList strict-local (Kevin Chavez in db64f93)
+* Adopt Contributor Covenant (Paul O'Shannessy in 2c61167)
+* Flowify editOnKeyDown.js (Kevin Chavez in 8473e41)
+* (Flowify) decodeInlineStyleRanges.js (Kevin Chavez in 20a619c)
+* Flowify editOnInput.js (Kevin Chavez in 594a14f)
+* Flowify editOnBlur.js (Kevin Chavez in 6972278)
+* updated function description for onEditInput event handler function (#2132) (Mukesh Soni in 14349f1)
+* updated hastext method to not account for zero space width chars (#2163) (Ajith V in 85aa3a3)
+* Encode non-ASCII characters in all snapshot tests (Daniel Lo Nigro in 734bd82)
+* @flow -> @flow-strict for html/shared (Runjie Guan in 0375c0e)
+* Revert D16421104: [rfc][draft-js] catch errors when encoding entity map (Frank Thompson in 8e9cabf)
+* catch errors when encoding entity map (Frank Thompson in 259d122)
+* Revert D16362778: [rfc][draftjs] catch errors when encoding entity map (Frank Thompson in 96e7f25)
+* catch errors when encoding entity map (Frank Thompson in c0e911c)
+* Flow-type DataTransfer.js (Kevin Chavez in ed09f78)
+* All these modules can actually be strict (Kevin Chavez in bc716b2)
+
+### Fixed
+* convertFromHTML breaks after converting \n string, issue #1822 (#1823) (Sannikov in 9246cc7)
+* Fixes HTML importer to make image entity immutable (#2184) (Claudio Procida in b858f43)
+* Fixing js example and cleaning up one sentence (#2172) (Liz LeCrone in 819f58c)
+* Reaping draft_killswitch_allow_nontextnodes (generatedunixname89002005287564 in 0e2e9a7)
+* Fix for workchat composer cursor jumping (Jainil Parekh in aed35d2)
+* Fix various grammatical errors (#2158) (Jordan Lee in 1ff8c8c)
+* Composer: Not assuming element has leaves (Nitzan Raz in ce8bdd0)
+* Update jsfiddle links with recent versions of the Draft and React (#2145) (Günay Mert Karadoğan in 22b7599)
+* Changes reference to BSD license to MIT (#2130) (claudiopro in 4064cae)
+* Updates CHANGELOG for v0.11.0 (#2052) (Claudio Procida in 973f7ff)
+* Fixed a bug causing block data being over-written when pasted. (Tee Xie in 82e2135)
+* Merge pull request #2113 from danielo515/patch-1 (Claudio Procida in 0e88544)
+* Update ShipIt Sync (Claudio Procida in 0f138d1)
+
 ## 0.11.0 (July 9th, 2019)
 
 ### Added
